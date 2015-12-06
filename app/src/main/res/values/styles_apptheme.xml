@@ -9,6 +9,7 @@
 
   <style name="ImageButtonAppTheme" parent="android:Widget.Holo.Light.ImageButton">
 	  <item name="android:background">@drawable/apptheme_btn_default_holo_light</item>
+      <item name="android:textColor">@drawable/text_button_default</item>
   </style>
 
   <style name="SeekBarAppTheme" parent="android:Widget.Holo.Light.SeekBar">
