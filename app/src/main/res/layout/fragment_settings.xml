@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="home.homecontrol.fragment.SettingsFragment"
+    android:background="#EEEEEE">
+
+    <LinearLayout
+        android:padding="4dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:textSize="24sp"
+            android:text="IP:"
+            android:layout_weight="20"
+            android:layout_width="0dp"
+            android:layout_height="match_parent" />
+
+        <EditText
+            android:id="@+id/settingIP"
+            android:gravity="center"
+            android:maxLength="3"
+            android:maxLines="1"
+            android:inputType="number"
+            android:layout_gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="50"
+            android:layout_height="wrap_content" />
+
+        <Button
+            android:id="@+id/settingIPButton"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Połacz"/>
+
+    </LinearLayout>
+
+</LinearLayout>

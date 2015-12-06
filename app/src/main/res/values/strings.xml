@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Home Control</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+
+    <!-- MainActivity-->
+    <string name="light_title_activity_main">OŚWIETLENIE</string>
+    <string name="switch_on_light_activity_main">ON</string>
+    <string name="switch_off_light_activity_main">OFF</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- MainPanelFragment -->
+    <string name="light_panel_fragment">OŚWIETLENIE</string>
+    <string name="temperature_panel_fragment">TEMPERATURA</string>
+    <string name="temperature_in_panel_fragment">WEWNĘTRZNA</string>
+    <string name="temperature_out_panel_fragment">ZEWNĘTRZNA</string>
+    <string name="movement_panel_fragment">WYKRYWANIE RUCHU</string>
+    <string name="sensors_panel_fragment">CZUJNIKI</string>
+    <string name="power_modules_panel_fragment">MODULY ZASILAJACE</string>
+
+</resources>
