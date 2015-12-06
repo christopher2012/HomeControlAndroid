@@ -7,14 +7,14 @@
     android:background="#EEEEEE">
 
     <ScrollView
-        android:paddingBottom="@dimen/activity_vertical_margin"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin"
-        android:paddingTop="@dimen/activity_vertical_margin"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <LinearLayout
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -36,7 +36,7 @@
                         android:gravity="center"
                         android:padding="4dp"
                         android:text="@string/light_title_activity_main"
-                        android:textSize="22dp"
+                        android:textSize="@dimen/title_segment_size"
                         android:textStyle="bold" />
 
                 </FrameLayout>
@@ -121,7 +121,7 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:text="@string/temperature_panel_fragment"
-                    android:textSize="22dp"
+                    android:textSize="@dimen/title_segment_size"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -203,7 +203,7 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:text="@string/movement_panel_fragment"
-                    android:textSize="22dp"
+                    android:textSize="@dimen/title_segment_size"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -368,7 +368,7 @@
                     android:gravity="center"
                     android:padding="4dp"
                     android:text="@string/sensors_panel_fragment"
-                    android:textSize="22dp"
+                    android:textSize="@dimen/title_segment_size"
                     android:textStyle="bold" />
 
                 <LinearLayout
