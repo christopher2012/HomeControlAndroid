@@ -22,6 +22,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import home.homecontrol.R;
+import home.homecontrol.network.NetworkData;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,37 +84,39 @@ public class MainPanelFragment extends Fragment {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                changeBrightness(seekBar.getProgress());
+                Log.d(LOG_TAG, "progressStop: " + seekBar.getProgress());
             }
         });
 
         switchLightOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               client.get("https://www.google.com", new AsyncHttpResponseHandler() {
-                   @Override
-                   public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                       String str = null;
-                       try {
-                           str = new String(responseBody, "UTF-8");
-                           Log.d("response", str);
-                       } catch (IOException e) {
-                           e.printStackTrace();
-                       }
-                   }
 
-                   @Override
-                   public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                       Toast.makeText(context, "Brak połączenie z urządzeniem!!", Toast.LENGTH_LONG).show();
-                   }
-               });
+                client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "L0", new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        String str = null;
+                        try {
+                            str = new String(responseBody, "UTF-8");
+                            Log.d("response", str);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                        Toast.makeText(context, "Brak połączenia z urządzeniem!!", Toast.LENGTH_LONG).show();
+                    }
+                });
             }
         });
 
         getSwitchLightOnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                client.get("https://www.google.com", new AsyncHttpResponseHandler() {
+                client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "L1", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
@@ -126,5 +129,29 @@ public class MainPanelFragment extends Fragment {
                 });
             }
         });
+    }
+
+    public void changeBrightness(int progress) {
+        client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "B" + validateProgress(progress),
+                new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                Toast.makeText(context, "Brak połączenie z urządzeniem!!", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    public String validateProgress(int progress) {
+        if (progress < 10)
+            return "00" + progress;
+        else if (progress < 100)
+            return "0" + progress;
+        else
+            return progress + "";
     }
 }

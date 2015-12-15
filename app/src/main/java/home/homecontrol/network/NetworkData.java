@@ -5,7 +5,7 @@ package home.homecontrol.network;
  */
 public class NetworkData {
     public static final String IP_SERVER = "http://192.168.0.";
-    public static final String SWITCH = "/swtich?state=";
+    public static final String LIGHT = "/light?state=";
     public static final String SETTINGS = "/settings";
     public static final String OK_MSG = "OK";
 
