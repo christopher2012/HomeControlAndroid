@@ -8,6 +8,7 @@ public class NetworkData {
     public static final String LIGHT = "/light?state=";
     public static final String SETTINGS = "/settings";
     public static final String OK_MSG = "OK";
+    public static final String TEMPERATURE_FEEDS = "http://api.thingspeak.com/channels/72588/feed.json?start=2011-11-11%2010:10:10";
 
     static String IP_SET = "";
 

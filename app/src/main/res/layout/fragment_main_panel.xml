@@ -148,6 +148,7 @@
                             android:layout_gravity="center">
 
                             <Button
+                                android:id="@+id/tempInsideButton"
                                 android:layout_width="120dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
@@ -175,6 +176,7 @@
                             android:layout_gravity="center">
 
                             <Button
+                                android:id="@+id/tempOutsideButton"
                                 android:layout_width="120dp"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"

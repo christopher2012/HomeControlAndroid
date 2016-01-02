@@ -24,4 +24,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.loopj.android:android-async-http:1.4.9'
+    compile 'com.jjoe64:graphview:4.0.1'
+    compile 'joda-time:joda-time:2.9.1'
 }

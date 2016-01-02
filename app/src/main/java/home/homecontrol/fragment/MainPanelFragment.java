@@ -40,6 +40,10 @@ public class MainPanelFragment extends Fragment {
     Button switchLightOffButton;
     @Bind(R.id.switchLightOnButton)
     Button getSwitchLightOnButton;
+    @Bind(R.id.tempInsideButton)
+    Button tempInsideButton;
+    @Bind(R.id.tempOutsideButton)
+    Button tempOutsideButton;
 
     AsyncHttpClient client;
     Context context;
@@ -92,11 +96,11 @@ public class MainPanelFragment extends Fragment {
         switchLightOffButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                seekBarBrightness.setProgress(0);
                 client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "L0", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        String str = null;
+                        String str;
                         try {
                             str = new String(responseBody, "UTF-8");
                             Log.d("response", str);
@@ -119,7 +123,7 @@ public class MainPanelFragment extends Fragment {
                 client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "L1", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
+                        seekBarBrightness.setProgress(100);
                     }
 
                     @Override
@@ -127,6 +131,17 @@ public class MainPanelFragment extends Fragment {
                         Toast.makeText(context, "Brak połączenie z urządzeniem!!", Toast.LENGTH_LONG).show();
                     }
                 });
+            }
+        });
+
+        tempInsideButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.mainFragmentContainer, new TemperatureFragment(), TemperatureFragment.FRAGMENT_TAG)
+                        .addToBackStack(TemperatureFragment.FRAGMENT_TAG)
+                        .commit();
             }
         });
     }
