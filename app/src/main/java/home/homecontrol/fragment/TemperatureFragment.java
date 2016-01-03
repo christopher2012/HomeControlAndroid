@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.helper.DateAsXAxisLabelFormatter;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -30,6 +31,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -106,6 +111,51 @@ public class TemperatureFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
+
+        // generate Dates
+        Calendar calendar = Calendar.getInstance();
+        Date d1 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d2 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d3 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d4 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d5 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d6 = calendar.getTime();
+        calendar.add(Calendar.DATE, 1);
+        Date d7 = calendar.getTime();
+
+        GraphView graph = graphView;
+
+// you can directly pass Date objects to DataPoint-Constructor
+// this will convert the Date to double via Date#getTime()
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[] {
+                new DataPoint(d1, 1),
+                new DataPoint(d2, 5),
+                new DataPoint(d3, 3),
+                new DataPoint(d4, 2),
+                new DataPoint(d5, 1),
+                new DataPoint(d6, 1),
+                new DataPoint(d7, 6)
+        });
+        graph.addSeries(series);
+
+// set date label formatter
+        SimpleDateFormat format = new SimpleDateFormat("dd.MM");
+        DateFormat df = DateFormat.getInstance();
+       // df.format("MM-dd");
+        graph.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity(), format));
+        graph.getGridLabelRenderer().setNumHorizontalLabels(5); // only 4 because of the space
+
+// set manual x bounds to have nice steps
+        graph.getViewport().setMinX(d1.getTime());
+        graph.getViewport().setMaxX(d3.getTime());
+        graph.getViewport().setXAxisBoundsManual(true);
+
+        /*
         LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(new DataPoint[]{
                 new DataPoint(0, 4),
                 new DataPoint(1, 5),
@@ -121,8 +171,10 @@ public class TemperatureFragment extends Fragment
         LineGraphSeries<DataPoint> seriesErr = new LineGraphSeries<DataPoint>(new DataPoint[]{
                 new DataPoint(7, 2),
                 new DataPoint(8, 2),
-                new DataPoint(9, 2),
+                new DataPoint(9, 2)
         });
+
+
 
         series.setOnDataPointTapListener(new OnDataPointTapListener() {
             @Override
@@ -140,12 +192,15 @@ public class TemperatureFragment extends Fragment
         series.setDataPointsRadius(4);
         series.setThickness(6);
         seriesErr.setThickness(6);
+
+
+        graphView.addSeries(seriesDate);
         graphView.getViewport().setScalable(true);
         graphView.getViewport().setScrollable(true);
         graphView.getViewport().setXAxisBoundsManual(true);
-        graphView.getViewport().setMinX(0.5);
-        graphView.getViewport().setMaxX(3.5);
-
+        //graphView.getViewport().setMinX(0.5);
+        //graphView.getViewport().setMaxX(3.5);
+*/
 
         /**
          * View port

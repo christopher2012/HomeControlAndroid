@@ -7,20 +7,28 @@
 
     <!-- MainActivity-->
     <string name="light_title_activity_main">OŚWIETLENIE</string>
-    <string name="switch_on_light_activity_main">WŁ</string>
-    <string name="switch_off_light_activity_main">WYŁ</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <!-- MainPanelFragment -->
+    <string name="alarm_title_settings_fragment">ALARM</string>
+    <string name="auto_off_settings_fragment">AUTO WYŁĄCZENIE</string>
+    <string name="auto_on_settings_fragment">AUTO WŁĄCZANIE </string>
     <string name="light_panel_fragment">OŚWIETLENIE</string>
+    <string name="switch_on_light_activity_main">WŁ</string>
+    <string name="switch_off_light_activity_main">WYŁ</string>
+
     <string name="temperature_panel_fragment">TEMPERATURA</string>
     <string name="temperature_in_panel_fragment">WEWNĘTRZNA</string>
     <string name="temperature_out_panel_fragment">ZEWNĘTRZNA</string>
+
     <string name="movement_panel_fragment">WYKRYWANIE RUCHU</string>
+
     <string name="sensors_panel_fragment">CZUJNIKI</string>
-    <string name="power_modules_panel_fragment">MODULY ZASILAJACE</string>
+    <string name="alarm_on_sensor">ALARM WŁ</string>
+    <string name="alarm_off_sensor">ALARM WYŁ</string>
+
 
     <!-- TemperatureFragment -->
     <string name="range_temp_fragment">ZAKRES DANYCH</string>

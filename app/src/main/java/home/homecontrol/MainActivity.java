@@ -10,16 +10,33 @@ import home.homecontrol.fragment.SettingsFragment;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static ActualStatus actualStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setExampleActualStatus();
 
         getFragmentManager()
                 .beginTransaction()
                 .replace(R.id.mainFragmentContainer, new MainPanelFragment(), MainPanelFragment.FRAGMENT_TAG)
                 .addToBackStack(MainPanelFragment.FRAGMENT_TAG)
                 .commit();
+    }
+
+    public static void setExampleActualStatus() {
+        actualStatus = new ActualStatus();
+        actualStatus.setLightOn(true);
+        actualStatus.setBrightness(55);
+        actualStatus.setInsideTemperature(22.55f);
+        actualStatus.setOutsideTemperature(-11.50f);
+        MovementSensor movementSensor = new MovementSensor(true);
+        actualStatus.setMovementAlarm(movementSensor);
+        actualStatus.setAutoSwitchOffLight(movementSensor);
+        actualStatus.setAutoSwitchOnLight(movementSensor);
+        actualStatus.setSmokeAlarm(true);
+        actualStatus.setMonoxideAlarm(false);
     }
 
     @Override
