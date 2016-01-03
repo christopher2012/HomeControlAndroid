@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import butterknife.Bind;
@@ -68,7 +71,8 @@ public class SettingsFragment extends Fragment {
                 int ip = -1;
                 try {
                     ip = Integer.valueOf(settingIPEdit.getText().toString());
-                } catch (NumberFormatException e){}
+                } catch (NumberFormatException e) {
+                }
 
                 if (ip < 255 && ip > 0) {
                     NetworkData.setIpSet(Integer.toString(ip));
@@ -81,14 +85,24 @@ public class SettingsFragment extends Fragment {
                             try {
                                 str = new String(responseBody, "UTF-8");
                                 Log.d(LOG_TAG, "response: " + str);
+                                JSONObject object = new JSONObject(str);
+                                if (object.getString("STATUS").equals("OK")) {
+                                    Toast.makeText(context, "Urządzenie zostało sparsowane!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(context, "Parsowanie się nie powiodło!", Toast.LENGTH_SHORT).show();
+                                }
                             } catch (IOException e) {
                                 e.printStackTrace();
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
+                            /*
                             if (str.equals(NetworkData.OK_MSG)) {
                                 Toast.makeText(context, "Urządzenie zostało sparsowane!", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(context, "Parsowanie się nie powiodło!", Toast.LENGTH_SHORT).show();
                             }
+                            */
                         }
 
                         @Override
