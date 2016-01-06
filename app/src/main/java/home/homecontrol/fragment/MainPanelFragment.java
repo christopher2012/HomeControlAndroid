@@ -1,10 +1,11 @@
 package home.homecontrol.fragment;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.os.Debug;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,13 +25,15 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 import home.homecontrol.MainActivity;
+import home.homecontrol.MovementSensor;
 import home.homecontrol.R;
 import home.homecontrol.network.NetworkData;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MainPanelFragment extends Fragment {
+public class MainPanelFragment extends Fragment
+        implements MovementSensorSettingsFragment.OnPIRSetup {
 
     public static final String FRAGMENT_TAG = "MainPanelFragment";
     private static final String LOG_TAG = MainPanelFragment.class.getName();
@@ -120,7 +123,7 @@ public class MainPanelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 seekBarBrightness.setProgress(0);
-                client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "L0", new AsyncHttpResponseHandler() {
+                client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND + NetworkData.CMD_SWITCH_LIGHT +"0", new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                         String str;
@@ -130,6 +133,8 @@ public class MainPanelFragment extends Fragment {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
+                        MainActivity.actualStatus.setLightOn(false);
                     }
 
                     @Override
@@ -143,17 +148,20 @@ public class MainPanelFragment extends Fragment {
         getSwitchLightOnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "L1", new AsyncHttpResponseHandler() {
-                    @Override
-                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        seekBarBrightness.setProgress(100);
-                    }
+                if (!MainActivity.actualStatus.isLightOn()) {
+                    seekBarBrightness.setProgress(100);
+                    client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND +NetworkData.CMD_SWITCH_LIGHT +"1", new AsyncHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                            MainActivity.actualStatus.setLightOn(true);
+                        }
 
-                    @Override
-                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                        Toast.makeText(context, "Brak połączenie z urządzeniem!!", Toast.LENGTH_LONG).show();
-                    }
-                });
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                            Toast.makeText(context, "Brak połączenie z urządzeniem!!", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
             }
         });
 
@@ -172,16 +180,8 @@ public class MainPanelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment mSensorSett = MovementSensorSettingsFragment
-                        .newInstance(getString(R.string.alarm_title_settings_fragment));
-                mSensorSett.show(getFragmentManager(), MovementSensorSettingsFragment.FRAGMENT_TAG);
-            }
-        });
-
-        autoOffLight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DialogFragment mSensorSett = MovementSensorSettingsFragment
-                        .newInstance(getString(R.string.auto_off_settings_fragment));
+                        .newInstance(getString(R.string.alarm_title_settings_fragment),
+                                MainPanelFragment.this, MovementSensorSettingsFragment.ALARM_REQUEST_CODE);
                 mSensorSett.show(getFragmentManager(), MovementSensorSettingsFragment.FRAGMENT_TAG);
             }
         });
@@ -190,7 +190,8 @@ public class MainPanelFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 DialogFragment mSensorSett = MovementSensorSettingsFragment
-                        .newInstance(getString(R.string.auto_on_settings_fragment));
+                        .newInstance(getString(R.string.auto_on_settings_fragment),
+                                MainPanelFragment.this, MovementSensorSettingsFragment.AUTO_LIHGT_REQUEST_CODE);
                 mSensorSett.show(getFragmentManager(), MovementSensorSettingsFragment.FRAGMENT_TAG);
             }
         });
@@ -223,7 +224,7 @@ public class MainPanelFragment extends Fragment {
     }
 
     public void changeBrightness(int progress) {
-        client.get(NetworkData.getIpServer() + NetworkData.LIGHT + "B" + validateProgress(progress),
+        client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND + NetworkData.CMD_CHANGE_BRIGHTNESS + validateProgress(progress),
                 new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -249,21 +250,92 @@ public class MainPanelFragment extends Fragment {
     }
 
     void updateStatus() {
-        if (MainActivity.actualStatus.isLightOn()) {
             seekBarBrightness.setProgress(MainActivity.actualStatus.getBrightness());
             bulbImage.setBackgroundColor(Color.rgb(255, 255, 255 - (int) (MainActivity.actualStatus.getBrightness() * 2.5)));
-        }
+
         tempInsideButton.setText("" + MainActivity.actualStatus.getInsideTemperature());
         tempOutsideButton.setText("" + MainActivity.actualStatus.getOutsideTemperature());
         moveAlarm.setText(MainActivity.actualStatus.getMovementAlarm().isOn() ?
                 getString(R.string.alarm_on_sensor) : getString(R.string.alarm_off_sensor));
-        autoOffLight.setText(MainActivity.actualStatus.getAutoSwitchOffLight().isOn() ?
-                getString(R.string.alarm_on_sensor) : getString(R.string.alarm_off_sensor));
         autoOnLight.setText(MainActivity.actualStatus.getAutoSwitchOnLight().isOn() ?
+                getString(R.string.auto_light_on) : getString(R.string.auto_light_off));
+        smokeSensorButton.setText(MainActivity.actualStatus.isSmokeAlarm() ?
                 getString(R.string.alarm_on_sensor) : getString(R.string.alarm_off_sensor));
-        smokeSensorButton.setText(MainActivity.actualStatus.isSmokeAlarm()?
+        monoxideSensorButton.setText(MainActivity.actualStatus.isMonoxideAlarm() ?
                 getString(R.string.alarm_on_sensor) : getString(R.string.alarm_off_sensor));
-        monoxideSensorButton.setText(MainActivity.actualStatus.isMonoxideAlarm()?
-                getString(R.string.alarm_on_sensor) : getString(R.string.alarm_off_sensor));
+    }
+
+    @Override
+    public void pitSetup(int requestCode, MovementSensor movementSensor) {
+        Log.d(LOG_TAG, "reqCode: " + requestCode);
+        Log.d(LOG_TAG, "status: " + movementSensor.isOn());
+        if (requestCode == MovementSensorSettingsFragment.ALARM_REQUEST_CODE) {
+            if (!((movementSensor.isOn() && (!MainActivity.actualStatus.getMovementAlarm().isOn()))
+                    ^ (movementSensor.isOn() && (!MainActivity.actualStatus.getMovementAlarm().isOn())))) {
+
+                Log.d(LOG_TAG, "sending request: " + NetworkData.getIpServer()
+                        + NetworkData.ANDROID_COMMAND + (movementSensor.isOn() ? NetworkData.CMD_ALARM + "1" : NetworkData.CMD_ALARM + "0"));
+                if (movementSensor.isOn())
+                    moveAlarm.setText(getString(R.string.alarm_on_sensor));
+                else
+                    moveAlarm.setText(getString(R.string.alarm_off_sensor));
+
+                client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND
+                                + (movementSensor.isOn() ? NetworkData.CMD_ALARM + "1" : NetworkData.CMD_ALARM + "0"),
+                        new AsyncHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                String str;
+                                try {
+                                    str = new String(responseBody, "UTF-8");
+                                    Log.d("response", str);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                MainActivity.actualStatus.setLightOn(false);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                Toast.makeText(context, "Brak połączenia z urządzeniem!!", Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
+
+        } else {
+            if (!((movementSensor.isOn() && (!MainActivity.actualStatus.getAutoSwitchOnLight().isOn()))
+                    ^ (movementSensor.isOn() && (!MainActivity.actualStatus.getAutoSwitchOnLight().isOn())))) {
+
+                Log.d(LOG_TAG, "sending request: " + NetworkData.getIpServer()
+                        + NetworkData.ANDROID_COMMAND + (movementSensor.isOn() ?NetworkData.CMD_AUTO_LIGHT_ON + "1" : NetworkData.CMD_AUTO_LIGHT_ON + "0"));
+                if (movementSensor.isOn())
+                    autoOnLight.setText(getString(R.string.auto_light_on));
+                else
+                    autoOnLight.setText(getString(R.string.auto_light_off));
+
+                client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND
+                                + (movementSensor.isOn() ? NetworkData.CMD_AUTO_LIGHT_ON + "1" : NetworkData.CMD_AUTO_LIGHT_ON + "0"),
+                        new AsyncHttpResponseHandler() {
+                            @Override
+                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                                String str;
+                                try {
+                                    str = new String(responseBody, "UTF-8");
+                                    Log.d("response", str);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
+                                MainActivity.actualStatus.setLightOn(false);
+                            }
+
+                            @Override
+                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                                Toast.makeText(context, "Brak połączenia z urządzeniem!!", Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
+        }
     }
 }

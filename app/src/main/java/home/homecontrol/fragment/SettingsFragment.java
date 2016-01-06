@@ -22,6 +22,9 @@ import java.io.IOException;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
+import home.homecontrol.ActualStatus;
+import home.homecontrol.MainActivity;
+import home.homecontrol.MovementSensor;
 import home.homecontrol.R;
 import home.homecontrol.network.NetworkData;
 
@@ -72,6 +75,7 @@ public class SettingsFragment extends Fragment {
                 try {
                     ip = Integer.valueOf(settingIPEdit.getText().toString());
                 } catch (NumberFormatException e) {
+
                 }
 
                 if (ip < 255 && ip > 0) {
@@ -88,6 +92,16 @@ public class SettingsFragment extends Fragment {
                                 JSONObject object = new JSONObject(str);
                                 if (object.getString("STATUS").equals("OK")) {
                                     Toast.makeText(context, "Urządzenie zostało sparsowane!", Toast.LENGTH_SHORT).show();
+                                    MainActivity.actualStatus.setLightOn(object.getInt("LIGHT") == 1 ? true : false);
+                                    MainActivity.actualStatus.setBrightness(object.getInt("BRIGHTNESS"));
+                                    MainActivity.actualStatus.setInsideTemperature(object.getDouble("TEMP_IN"));
+                                    MainActivity.actualStatus.setOutsideTemperature(object.getDouble("TEMP_OUT"));
+                                    MovementSensor movementSensorAlarm = new MovementSensor(object.getInt("ALARM") == 1 ? true : false);
+                                    MovementSensor movementSensorLight = new MovementSensor(object.getInt("AUTO_ON") == 1 ? true : false);
+                                    MainActivity.actualStatus.setMovementAlarm(movementSensorAlarm);
+                                    MainActivity.actualStatus.setAutoSwitchOnLight(movementSensorLight);
+                                    MainActivity.actualStatus.setSmokeAlarm(object.getInt("SMOKE_ALARM") == 1 ? true : false);
+                                    MainActivity.actualStatus.setMonoxideAlarm(object.getInt("MONOXIDE_ALARM") == 1 ? true : false);
                                 } else {
                                     Toast.makeText(context, "Parsowanie się nie powiodło!", Toast.LENGTH_SHORT).show();
                                 }
@@ -95,14 +109,8 @@ public class SettingsFragment extends Fragment {
                                 e.printStackTrace();
                             } catch (JSONException e) {
                                 e.printStackTrace();
+                                Toast.makeText(context, "Nieprawidłowa odpowiedz serwera!", Toast.LENGTH_SHORT).show();
                             }
-                            /*
-                            if (str.equals(NetworkData.OK_MSG)) {
-                                Toast.makeText(context, "Urządzenie zostało sparsowane!", Toast.LENGTH_SHORT).show();
-                            } else {
-                                Toast.makeText(context, "Parsowanie się nie powiodło!", Toast.LENGTH_SHORT).show();
-                            }
-                            */
                         }
 
                         @Override

@@ -27,6 +27,8 @@
 
     <string name="sensors_panel_fragment">CZUJNIKI</string>
     <string name="alarm_on_sensor">ALARM WŁ</string>
+    <string name="auto_light_off">AUTO WYŁ</string>
+    <string name="auto_light_on">AUTO WŁ</string>
     <string name="alarm_off_sensor">ALARM WYŁ</string>
 
 

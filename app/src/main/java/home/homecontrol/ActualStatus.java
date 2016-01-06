@@ -48,12 +48,20 @@ public class ActualStatus {
         return insideTemperature;
     }
 
+    public void setInsideTemperature(double insideTemperature) {
+        setInsideTemperature((float)insideTemperature);
+    }
+
     public void setInsideTemperature(float insideTemperature) {
         this.insideTemperature = insideTemperature;
     }
 
     public float getOutsideTemperature() {
         return outsideTemperature;
+    }
+
+    public void setOutsideTemperature(double outsideTemperature) {
+        setOutsideTemperature((float) outsideTemperature);
     }
 
     public void setOutsideTemperature(float outsideTemperature) {
