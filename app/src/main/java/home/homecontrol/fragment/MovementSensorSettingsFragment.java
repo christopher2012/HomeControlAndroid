@@ -84,8 +84,6 @@ public class MovementSensorSettingsFragment extends DialogFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-
         callback = (OnPIRSetup) getTargetFragment();
 
         getDialog().setTitle(getArguments().getString(TITLE_KEY));
@@ -99,7 +97,6 @@ public class MovementSensorSettingsFragment extends DialogFragment
         checkBoxes.add(friBox);
         checkBoxes.add(satBox);
         checkBoxes.add(sunBox);
-        checkBoxes.add(customBox);
 
         binaryWeeks = new ArrayList<>();
         binaryWeeks.add(MONDAY);
@@ -143,8 +140,9 @@ public class MovementSensorSettingsFragment extends DialogFragment
                         checkedBoxes |= binaryWeeks.get(i);
 
                 }
-
-                //callback.pitSetup(getTargetRequestCode(), movementSensor);
+                movementSensor.setWeekDays(checkedBoxes);
+                movementSensor.setIsCustomSettOn(customBox.isEnabled());
+                callback.pitSetup(getTargetRequestCode(), movementSensor);
                 dismiss();
                 break;
             }
@@ -173,6 +171,6 @@ public class MovementSensorSettingsFragment extends DialogFragment
     }
 
     interface OnPIRSetup {
-        void pitSetup(int reqestCode, MovementSensor movementSensor);
+        void pitSetup(int requestCode, MovementSensor movementSensor);
     }
 }

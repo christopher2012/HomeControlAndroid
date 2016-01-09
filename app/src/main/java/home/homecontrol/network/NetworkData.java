@@ -29,7 +29,6 @@ public class NetworkData {
     public static final String OK_MSG = "OK";
     public static final String TEMPERATURE_FEEDS = "http://api.thingspeak.com/channels/72588/feed.json?start=2011-11-11%2010:10:10";
 
-    public static final String CMD_SWITCH_LIGHT = "A";
     public static final String CMD_CHANGE_BRIGHTNESS = "B";
     public static final String CMD_GET_DATA = "D";
     public static final String CMD_AUTO_LIGHT_ON = "C";
@@ -46,19 +45,21 @@ public class NetworkData {
     AsyncHttpClient client;
     OnServerResponse callback;
 
-    public NetworkData(Fragment fragment){
+    public NetworkData(Fragment fragment) {
         client = new AsyncHttpClient();
         client.setTimeout(5000);
         callback = (OnServerResponse) fragment;
     }
 
-    public enum NetworkStatus{
+    public enum NetworkStatus {
+        PARSING_OK,
         CONNECTION_ERROR,
         CONNECTION_OK,
-        RESPONSE_ERROR
+        RESPONSE_ERROR,
+        SETTING_ERROR
     }
 
-    public enum ResponseType{
+    public enum ResponseType {
         DATA,
         CONFIRMATION
     }
@@ -72,7 +73,15 @@ public class NetworkData {
     }
 
     public void updateData(){
-        if(!IP_SET.equals("")){
+        updateData(false);
+    }
+
+    public void parseDevice(){
+        updateData(true);
+    }
+
+    public void updateData(final boolean isParsing) {
+        if (!IP_SET.equals("")) {
             String request = NetworkData.getIpServer() + NetworkData.SETTINGS;
             client.get(request, new AsyncHttpResponseHandler() {
                 @Override
@@ -84,7 +93,10 @@ public class NetworkData {
                         JSONObject object = new JSONObject(str);
                         if (object.getString("STATUS").equals("OK")) {
                             JSONParser.setActualStatus(object);
-                            callback.serverResponse(NetworkStatus.CONNECTION_OK, ResponseType.DATA);
+                            if (isParsing)
+                                callback.serverResponse(NetworkStatus.PARSING_OK, ResponseType.DATA);
+                            else
+                                callback.serverResponse(NetworkStatus.CONNECTION_OK, ResponseType.DATA);
                         } else {
                             callback.serverResponse(NetworkStatus.CONNECTION_ERROR, ResponseType.DATA);
                         }
@@ -101,25 +113,23 @@ public class NetworkData {
                     callback.serverResponse(NetworkStatus.CONNECTION_ERROR, ResponseType.DATA);
                 }
             });
+        }else{
+            callback.serverResponse(NetworkStatus.SETTING_ERROR, ResponseType.DATA);
         }
     }
 
 
-
-    public void sendCommand(final String command, final String state){
-        if(!IP_SET.equals("")){
+    public void sendCommand(final String command, final String state) {
+        if (!IP_SET.equals("")) {
             String request = NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND + command + state;
             Log.d(LOG_TAG, "sending data: " + request);
             client.get(request, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    switch(command){
-                        case CMD_SWITCH_LIGHT:
-                            if(state.equals("0")) {
-                                MainActivity.actualStatus.setLightOn(false);
-                            }else{
-                                MainActivity.actualStatus.setLightOn(true);
-                            }
+                    switch (command) {
+                        case CMD_CHANGE_BRIGHTNESS:
+                                MainActivity.actualStatus.setBrightness(Integer.parseInt(state));
+
                             break;
                     }
                     Log.d(LOG_TAG, "data sent");
@@ -129,11 +139,12 @@ public class NetworkData {
                 public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 }
             });
-
+        }else{
+            callback.serverResponse(NetworkStatus.SETTING_ERROR, ResponseType.DATA);
         }
     }
 
-    public interface OnServerResponse{
+    public interface OnServerResponse {
         void serverResponse(NetworkStatus networkStatus, ResponseType responseType);
     }
 

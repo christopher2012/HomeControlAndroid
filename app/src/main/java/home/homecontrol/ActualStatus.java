@@ -10,7 +10,6 @@ import java.util.Set;
 public class ActualStatus {
 
     String apiKey;
-    boolean isLightOn;
     int brightness;
     float insideTemperature;
     float outsideTemperature;
@@ -28,13 +27,6 @@ public class ActualStatus {
         this.apiKey = apiKey;
     }
 
-    public boolean isLightOn() {
-        return isLightOn;
-    }
-
-    public void setLightOn(boolean isLightOn) {
-        this.isLightOn = isLightOn;
-    }
 
     public int getBrightness() {
         return brightness;

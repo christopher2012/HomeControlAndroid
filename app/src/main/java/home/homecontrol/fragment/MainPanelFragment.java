@@ -21,7 +21,10 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.joda.time.DateTime;
+
 import java.io.IOException;
+import java.sql.Connection;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,10 +39,13 @@ import home.homecontrol.network.NetworkData;
  */
 public class MainPanelFragment extends Fragment
         implements MovementSensorSettingsFragment.OnPIRSetup,
-        NetworkData.OnServerResponse {
+        NetworkData.OnServerResponse,
+        ConnectionFragment.OnConnectDevice{
 
     public static final String FRAGMENT_TAG = "MainPanelFragment";
     private static final String LOG_TAG = MainPanelFragment.class.getName();
+    private static final int ON_START_REQUEST_CODE = 0;
+    private static final int REDO_CONNECTION_REQUEST_CODE = 1;
 
     @Bind(R.id.seekBarBrightness)
     SeekBar seekBarBrightness;
@@ -105,10 +111,22 @@ public class MainPanelFragment extends Fragment
         return view;
     }
 
+
+    void showConnectionDialog() {
+        DialogFragment newConnectionFragment = new ConnectionFragment();
+        newConnectionFragment.setTargetFragment(this, ON_START_REQUEST_CODE);
+        newConnectionFragment.show(getFragmentManager(), ConnectionFragment.FRAGMENT_TAG);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         updateStatus();
+        if (NetworkData.getIpSet().equals("")) {
+            if (getFragmentManager().findFragmentByTag(ConnectionFragment.FRAGMENT_TAG) == null)
+                showConnectionDialog();
+        }
+
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
@@ -159,9 +177,9 @@ public class MainPanelFragment extends Fragment
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (MainActivity.actualStatus.isLightOn()) {
+                        if (MainActivity.actualStatus.getBrightness() !=0) {
                             seekBarBrightness.setProgress(0);
-                            networkData.sendCommand(NetworkData.CMD_SWITCH_LIGHT, "0");
+                            networkData.sendCommand(NetworkData.CMD_CHANGE_BRIGHTNESS, "0");
                         }
                     }
                 }
@@ -171,9 +189,9 @@ public class MainPanelFragment extends Fragment
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (!MainActivity.actualStatus.isLightOn()) {
+                        if (MainActivity.actualStatus.getBrightness()!=100) {
                             seekBarBrightness.setProgress(100);
-                            networkData.sendCommand(NetworkData.CMD_SWITCH_LIGHT, "1");
+                            networkData.sendCommand(NetworkData.CMD_CHANGE_BRIGHTNESS, "100");
                         }
                     }
                 }
@@ -206,7 +224,7 @@ public class MainPanelFragment extends Fragment
         );
 
         autoOnLight.setOnClickListener(
-                new View.OnClickListener()                {
+                new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         DialogFragment mSensorSett = MovementSensorSettingsFragment
@@ -219,14 +237,16 @@ public class MainPanelFragment extends Fragment
         );
 
         smokeSensorButton.setOnClickListener(
-                new View.OnClickListener()                {
+                new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (MainActivity.actualStatus.isSmokeAlarm()) {
                             MainActivity.actualStatus.setSmokeAlarm(false);
+                            networkData.sendCommand(NetworkData.CMD_SMOKE_ALARM, "0");
                             smokeSensorButton.setText(getString(R.string.alarm_off_sensor));
-                        } else {
+                        }else{
                             MainActivity.actualStatus.setSmokeAlarm(true);
+                            networkData.sendCommand(NetworkData.CMD_SMOKE_ALARM, "1");
                             smokeSensorButton.setText(getString(R.string.alarm_on_sensor));
                         }
                     }
@@ -235,19 +255,21 @@ public class MainPanelFragment extends Fragment
         );
 
         monoxideSensorButton.setOnClickListener(
-                new View.OnClickListener()                {
+                new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (MainActivity.actualStatus.isMonoxideAlarm()) {
                             MainActivity.actualStatus.setMonoxideAlarm(false);
+                            networkData.sendCommand(NetworkData.CMD_MONOXIDE_ALARM, "0");
                             monoxideSensorButton.setText(getString(R.string.alarm_off_sensor));
                         } else {
                             MainActivity.actualStatus.setMonoxideAlarm(true);
+                            networkData.sendCommand(NetworkData.CMD_MONOXIDE_ALARM, "1");
                             monoxideSensorButton.setText(getString(R.string.alarm_on_sensor));
                         }
+
                     }
                 }
-
         );
     }
 
@@ -322,7 +344,6 @@ public class MainPanelFragment extends Fragment
                                     e.printStackTrace();
                                 }
 
-                                MainActivity.actualStatus.setLightOn(false);
                             }
 
                             @Override
@@ -356,7 +377,6 @@ public class MainPanelFragment extends Fragment
                                     e.printStackTrace();
                                 }
 
-                                MainActivity.actualStatus.setLightOn(false);
                             }
 
                             @Override
@@ -377,16 +397,24 @@ public class MainPanelFragment extends Fragment
                 case CONNECTION_ERROR:
                     Toast.makeText(context, "Brak połączenia z urządzeniem!", Toast.LENGTH_LONG).show();
                     break;
-                case CONNECTION_OK:
+                case PARSING_OK:
                     Toast.makeText(context, "Urządzenie zostało sparsowane!", Toast.LENGTH_LONG).show();
                     updateStatus();
                     break;
                 case RESPONSE_ERROR:
                     Toast.makeText(context, "Nieprawidłowa odpowiedz serwera!", Toast.LENGTH_SHORT).show();
                     break;
+                case SETTING_ERROR:
+                    showConnectionDialog();
+                    break;
             }
+            updateStatus();
             swipeRefreshLayout.setRefreshing(false);
         }
     }
 
+    @Override
+    public void connectDevice() {
+        networkData.parseDevice();
+    }
 }

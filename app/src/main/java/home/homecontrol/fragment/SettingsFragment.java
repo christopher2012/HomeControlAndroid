@@ -31,7 +31,8 @@ import home.homecontrol.network.NetworkData;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment
+        implements NetworkData.OnServerResponse {
 
     public static final String FRAGMENT_TAG = "SettingsFragment";
     private static final String LOG_TAG = SettingsFragment.class.getName();
@@ -42,7 +43,7 @@ public class SettingsFragment extends Fragment {
     Button settingIpButton;
     Context context;
 
-    AsyncHttpClient client;
+    NetworkData networkData;
 
     public SettingsFragment() {
 
@@ -52,7 +53,7 @@ public class SettingsFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         context = getActivity();
-        client = new AsyncHttpClient();
+        networkData = new NetworkData(this);
     }
 
     @Override
@@ -80,48 +81,19 @@ public class SettingsFragment extends Fragment {
 
                 if (ip < 255 && ip > 0) {
                     NetworkData.setIpSet(Integer.toString(ip));
-                    String request = NetworkData.getIpServer() + NetworkData.SETTINGS;
-                    Log.d(LOG_TAG, request);
-                    client.get(request, new AsyncHttpResponseHandler() {
-                        @Override
-                        public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                            String str = null;
-                            try {
-                                str = new String(responseBody, "UTF-8");
-                                Log.d(LOG_TAG, "response: " + str);
-                                JSONObject object = new JSONObject(str);
-                                if (object.getString("STATUS").equals("OK")) {
-                                    Toast.makeText(context, "Urządzenie zostało sparsowane!", Toast.LENGTH_SHORT).show();
-                                    MainActivity.actualStatus.setLightOn(object.getInt("LIGHT") == 1 ? true : false);
-                                    MainActivity.actualStatus.setBrightness(object.getInt("BRIGHTNESS"));
-                                    MainActivity.actualStatus.setInsideTemperature(object.getDouble("TEMP_IN"));
-                                    MainActivity.actualStatus.setOutsideTemperature(object.getDouble("TEMP_OUT"));
-                                    MovementSensor movementSensorAlarm = new MovementSensor(object.getInt("ALARM") == 1 ? true : false);
-                                    MovementSensor movementSensorLight = new MovementSensor(object.getInt("AUTO_ON") == 1 ? true : false);
-                                    MainActivity.actualStatus.setMovementAlarm(movementSensorAlarm);
-                                    MainActivity.actualStatus.setAutoSwitchOnLight(movementSensorLight);
-                                    MainActivity.actualStatus.setSmokeAlarm(object.getInt("SMOKE_ALARM") == 1 ? true : false);
-                                    MainActivity.actualStatus.setMonoxideAlarm(object.getInt("MONOXIDE_ALARM") == 1 ? true : false);
-                                } else {
-                                    Toast.makeText(context, "Parsowanie się nie powiodło!", Toast.LENGTH_SHORT).show();
-                                }
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Toast.makeText(context, "Nieprawidłowa odpowiedz serwera!", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                            Toast.makeText(context, "Brak połączenia z urządzeniem!", Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                    networkData.parseDevice();
                 } else {
                     Toast.makeText(context, "Zły adress IP", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    @Override
+    public void serverResponse(NetworkData.NetworkStatus networkStatus, NetworkData.ResponseType responseType) {
+        if (networkStatus == NetworkData.NetworkStatus.PARSING_OK)
+            Toast.makeText(context, "Urządzenie zostało sparsowane!", Toast.LENGTH_LONG).show();
+        else if(networkStatus == NetworkData.NetworkStatus.RESPONSE_ERROR)
+            Toast.makeText(context, "Nieprawidłowa odpowiedz serwera!", Toast.LENGTH_SHORT).show();
     }
 }

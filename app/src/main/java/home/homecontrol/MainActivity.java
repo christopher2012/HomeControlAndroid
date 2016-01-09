@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
 
     public static void setExampleActualStatus() {
         actualStatus = new ActualStatus();
-        actualStatus.setLightOn(false);
         actualStatus.setBrightness(0);
         actualStatus.setInsideTemperature(0.0f);
         actualStatus.setOutsideTemperature(0.0f);

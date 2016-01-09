@@ -14,7 +14,6 @@ import home.homecontrol.MovementSensor;
 public class JSONParser {
 
     public static void setActualStatus(JSONObject jsonObject) throws JSONException {
-        MainActivity.actualStatus.setLightOn(jsonObject.getInt("LIGHT") == 1 ? true : false);
         MainActivity.actualStatus.setBrightness(jsonObject.getInt("BRIGHTNESS"));
         MainActivity.actualStatus.setInsideTemperature(jsonObject.getDouble("TEMP_IN"));
         MainActivity.actualStatus.setOutsideTemperature(jsonObject.getDouble("TEMP_OUT"));
