@@ -1,453 +1,460 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.v4.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity"
-    android:background="#EEEEEE">
+    android:layout_height="match_parent">
 
-    <ScrollView
+    <LinearLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#EEEEEE"
+        android:orientation="vertical"
+        tools:context=".MainActivity">
 
-        <LinearLayout
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
+        <ScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/background_light_segment"
+                android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:padding="2dp">
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin">
 
-                <FrameLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/background_light_segment"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:padding="4dp"
+                            android:text="@string/light_title_activity_main"
+                            android:textSize="@dimen/title_segment_size"
+                            android:textStyle="bold" />
+
+                    </FrameLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:orientation="horizontal">
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="35">
+
+                            <Button
+                                android:id="@+id/switchLightOffButton"
+                                android:layout_width="80dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:text="@string/switch_off_light_activity_main" />
+
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="40">
+
+                            <ImageView
+                                android:id="@+id/bulbImage"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="fitXY"
+                                android:src="@drawable/bulb" />
+
+                        </FrameLayout>
+
+                        <FrameLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="35">
+
+                            <Button
+                                android:id="@+id/switchLightOnButton"
+                                android:layout_width="80dp"
+                                android:layout_height="50dp"
+                                android:layout_gravity="center"
+                                android:text="@string/switch_on_light_activity_main" />
+
+                        </FrameLayout>
+
+                    </LinearLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="12dp"
+                        android:layout_marginTop="6dp">
+
+                        <SeekBar
+                            android:id="@+id/seekBarBrightness"
+                            android:layout_width="match_parent"
+                            android:layout_height="32dp" />
+
+                    </FrameLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/background_temperature_segment"
+                    android:orientation="vertical"
+                    android:padding="2dp">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:padding="4dp"
-                        android:text="@string/light_title_activity_main"
+                        android:text="@string/temperature_panel_fragment"
                         android:textSize="@dimen/title_segment_size"
                         android:textStyle="bold" />
 
-                </FrameLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="80dp"
-                    android:orientation="horizontal">
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="35">
-
-                        <Button
-                            android:id="@+id/switchLightOffButton"
-                            android:layout_width="80dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"
-                            android:text="@string/switch_off_light_activity_main" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="40">
-
-                        <ImageView
-                            android:id="@+id/bulbImage"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:scaleType="fitXY"
-                            android:src="@drawable/bulb" />
-
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="35">
-
-                        <Button
-                            android:id="@+id/switchLightOnButton"
-                            android:layout_width="80dp"
-                            android:layout_height="50dp"
-                            android:layout_gravity="center"
-                            android:text="@string/switch_on_light_activity_main" />
-
-                    </FrameLayout>
-
-                </LinearLayout>
-
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="6dp">
-
-                    <SeekBar
-                        android:id="@+id/seekBarBrightness"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="32dp" />
-
-                </FrameLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/background_temperature_segment"
-                android:orientation="vertical"
-                android:padding="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/temperature_panel_fragment"
-                    android:textSize="@dimen/title_segment_size"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:orientation="horizontal">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="50"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/temperature_in_panel_fragment" />
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center">
-
-                            <Button
-                                android:layout_margin="6dp"
-                                android:id="@+id/tempInsideButton"
-                                android:layout_width="120dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="29st" />
-
-                        </FrameLayout>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="50"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:gravity="center"
-                            android:text="@string/temperature_out_panel_fragment" />
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center">
-
-                            <Button
-                                android:layout_margin="6dp"
-                                android:id="@+id/tempOutsideButton"
-                                android:layout_width="120dp"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center"
-                                android:text="29st" />
-
-                        </FrameLayout>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/background_move_control_segment"
-                android:orientation="vertical"
-                android:padding="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/movement_panel_fragment"
-                    android:textSize="@dimen/title_segment_size"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="4dp">
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="60"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="ALARM - RUCH" />
-
-                        <TextView
-                            android:visibility="gone"
-                            android:layout_width="match_parent"
-                            android:layout_height="36dp"
-                            android:gravity="center"
-                            android:text="WYLACZANIE SWIATLA" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:gravity="center"
-                            android:text="WLACZANIA SWIATLA" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="40"
-                        android:orientation="vertical">
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp">
-
-                            <Button
-                                android:id="@+id/moveAlarmMainPanel"
-                                android:layout_width="100dp"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="2dp"
-                                android:layout_marginTop="2dp"
-                                android:gravity="center"
-                                android:padding="2dp"
-                                android:textSize="14sp"
-                                android:text="@string/alarm_off_sensor" />
-
-                        </FrameLayout>
-
-                        <FrameLayout
-                            android:visibility="gone"
-                            android:layout_width="match_parent"
-                            android:layout_height="36dp"
-                            android:layout_gravity="center">
-
-                            <Button
-                                android:id="@+id/autoOffLightMainPanel"
-                                android:layout_width="100dp"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="2dp"
-                                android:layout_marginTop="2dp"
-                                android:gravity="center"
-                                android:textSize="14sp"
-                                android:text="@string/auto_light_off" />
-
-                        </FrameLayout>
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_gravity="center">
-
-                            <Button
-                                android:textSize="14sp"
-                                android:id="@+id/autoOnLightMainPanel"
-                                android:layout_width="100dp"
-                                android:layout_height="match_parent"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="2dp"
-                                android:layout_marginTop="2dp"
-                                android:gravity="center"
-                                android:text="AUTO" />
-                        </FrameLayout>
-
-                    </LinearLayout>
-
-
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:background="@drawable/background_sensors_segment"
-                android:orientation="vertical"
-                android:padding="2dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="4dp"
-                    android:text="@string/sensors_panel_fragment"
-                    android:textSize="@dimen/title_segment_size"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <LinearLayout
                         android:layout_marginBottom="4dp"
-                        android:layout_weight="30"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:orientation="horizontal">
 
-                        <TextView
-                            android:gravity="center"
-                            android:layout_width="match_parent"
-                            android:layout_height="42dp"
-                            android:text="CZUJNIK GAZU" />
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="50"
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:gravity="center"
-                            android:layout_width="match_parent"
-                            android:layout_height="42dp"
-                            android:text="CZUJNIK CZADU" />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/temperature_in_panel_fragment" />
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center">
+
+                                <Button
+                                    android:id="@+id/tempInsideButton"
+                                    android:layout_width="120dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="6dp"
+                                    android:text="29st" />
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="50"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:text="@string/temperature_out_panel_fragment" />
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_gravity="center">
+
+                                <Button
+                                    android:id="@+id/tempOutsideButton"
+                                    android:layout_width="120dp"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="6dp"
+                                    android:text="29st" />
+
+                            </FrameLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/background_move_control_segment"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/movement_panel_fragment"
+                        android:textSize="@dimen/title_segment_size"
+                        android:textStyle="bold" />
+
                     <LinearLayout
-                        android:layout_weight="40"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="4dp"
+                        android:orientation="horizontal">
 
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="42dp"
-                            android:layout_gravity="center">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="60"
+                            android:orientation="vertical">
 
-                            <Button
-                                android:id="@+id/sensor1_main_panel_button"
-                                android:layout_width="100dp"
-                                android:layout_height="36dp"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="2dp"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="8dp"
-                                android:layout_marginTop="2dp"
-                               android:gravity="center"
-                                android:textSize="14sp"
-                                android:text="ALARM ON" />
-
-                        </FrameLayout>
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="42dp"
-                            android:layout_gravity="center">
-
-                            <Button
-                                android:id="@+id/sensor2_main_panel_button"
-                                android:layout_width="100dp"
-                                android:layout_height="36dp"
-                                android:layout_gravity="center"
-                                android:layout_marginBottom="2dp"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="8dp"
-                                android:layout_marginTop="2dp"
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
                                 android:gravity="center"
-                                android:textSize="14sp"
-                                android:text="ALARM ON" />
+                                android:text="ALARM - RUCH" />
 
-                        </FrameLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:gravity="center"
+                                android:text="WYLACZANIE SWIATLA"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:gravity="center"
+                                android:text="WLACZANIA SWIATLA" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="40"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp">
+
+                                <Button
+                                    android:id="@+id/moveAlarmMainPanel"
+                                    android:layout_width="100dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center"
+                                    android:padding="2dp"
+                                    android:text="@string/alarm_off_sensor"
+                                    android:textSize="14sp" />
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="36dp"
+                                android:layout_gravity="center"
+                                android:visibility="gone">
+
+                                <Button
+                                    android:id="@+id/autoOffLightMainPanel"
+                                    android:layout_width="100dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center"
+                                    android:text="@string/auto_light_off"
+                                    android:textSize="14sp" />
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_gravity="center">
+
+                                <Button
+                                    android:id="@+id/autoOnLightMainPanel"
+                                    android:layout_width="100dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center"
+                                    android:text="AUTO"
+                                    android:textSize="14sp" />
+                            </FrameLayout>
+
+                        </LinearLayout>
+
 
                     </LinearLayout>
 
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/background_sensors_segment"
+                    android:orientation="vertical"
+                    android:padding="2dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:padding="4dp"
+                        android:text="@string/sensors_panel_fragment"
+                        android:textSize="@dimen/title_segment_size"
+                        android:textStyle="bold" />
+
                     <LinearLayout
-                        android:layout_weight="45"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="42dp">
-
-                            <TextView
-                                android:id="@+id/sensor1_main_panel_text"
-                                android:background="@drawable/background_light_segment"
-                                android:layout_marginRight="6dp"
-                                android:layout_marginLeft="6dp"
-                                android:layout_marginBottom="2dp"
-                                android:layout_marginTop="2dp"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="24mg/cm3"/>
-
-                        </FrameLayout>
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="42dp">
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="4dp"
+                            android:layout_weight="30"
+                            android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/sensor2_main_panel_text"
-                                android:background="@drawable/background_light_segment"
-                                android:layout_marginRight="6dp"
-                                android:layout_marginLeft="6dp"
-                                android:layout_marginBottom="2dp"
-                                android:layout_marginTop="2dp"
-                                android:layout_gravity="center"
-                                android:gravity="center"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:text="24mg/cm3"/>
+                                android:layout_height="42dp"
+                                android:gravity="center"
+                                android:text="CZUJNIK GAZU" />
 
-                        </FrameLayout>
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="42dp"
+                                android:gravity="center"
+                                android:text="CZUJNIK CZADU" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="40"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="42dp"
+                                android:layout_gravity="center">
+
+                                <Button
+                                    android:id="@+id/sensor1_main_panel_button"
+                                    android:layout_width="100dp"
+                                    android:layout_height="36dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center"
+                                    android:text="ALARM ON"
+                                    android:textSize="14sp" />
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="42dp"
+                                android:layout_gravity="center">
+
+                                <Button
+                                    android:id="@+id/sensor2_main_panel_button"
+                                    android:layout_width="100dp"
+                                    android:layout_height="36dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginLeft="8dp"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_marginTop="2dp"
+                                    android:gravity="center"
+                                    android:text="ALARM ON"
+                                    android:textSize="14sp" />
+
+                            </FrameLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:layout_weight="45"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="42dp">
+
+                                <TextView
+                                    android:id="@+id/sensor1_main_panel_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginLeft="6dp"
+                                    android:layout_marginRight="6dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/background_sensor_level"
+                                    android:gravity="center"
+                                    android:text="NISKI"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                            </FrameLayout>
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="42dp">
+
+                                <TextView
+                                    android:id="@+id/sensor2_main_panel_text"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_gravity="center"
+                                    android:layout_marginBottom="2dp"
+                                    android:layout_marginLeft="6dp"
+                                    android:layout_marginRight="6dp"
+                                    android:layout_marginTop="2dp"
+                                    android:background="@drawable/background_sensor_level"
+                                    android:gravity="center"
+                                    android:text="NISKI"
+                                    android:textSize="18sp"
+                                    android:textStyle="bold" />
+
+                            </FrameLayout>
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -455,8 +462,7 @@
 
             </LinearLayout>
 
-        </LinearLayout>
+        </ScrollView>
 
-    </ScrollView>
-
-</LinearLayout>
+    </LinearLayout>
+</android.support.v4.widget.SwipeRefreshLayout>

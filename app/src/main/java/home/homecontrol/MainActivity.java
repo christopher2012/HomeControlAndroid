@@ -27,15 +27,15 @@ public class MainActivity extends AppCompatActivity {
 
     public static void setExampleActualStatus() {
         actualStatus = new ActualStatus();
-        actualStatus.setLightOn(true);
-        actualStatus.setBrightness(55);
-        actualStatus.setInsideTemperature(22.55f);
-        actualStatus.setOutsideTemperature(-11.50f);
-        MovementSensor movementSensor = new MovementSensor(true);
+        actualStatus.setLightOn(false);
+        actualStatus.setBrightness(0);
+        actualStatus.setInsideTemperature(0.0f);
+        actualStatus.setOutsideTemperature(0.0f);
+        MovementSensor movementSensor = new MovementSensor(false);
         actualStatus.setMovementAlarm(movementSensor);
         actualStatus.setAutoSwitchOffLight(movementSensor);
         actualStatus.setAutoSwitchOnLight(movementSensor);
-        actualStatus.setSmokeAlarm(true);
+        actualStatus.setSmokeAlarm(false);
         actualStatus.setMonoxideAlarm(false);
     }
 
