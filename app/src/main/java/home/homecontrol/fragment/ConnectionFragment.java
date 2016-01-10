@@ -23,6 +23,7 @@ public class ConnectionFragment extends DialogFragment {
     public static final String LOG_TAG = ConnectionFragment.class.getName();
     public static final String FRAGMENT_TAG= "ConnectionFragment";
 
+
     @Bind(R.id.okButtonConnection)
     Button okConnect;
     @Bind(R.id.ipEditTextConnection)
@@ -33,6 +34,7 @@ public class ConnectionFragment extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getDialog().setTitle("Podaj IP");
         View view = inflater.inflate(R.layout.fragment_connection, container, false);
         ButterKnife.bind(this, view);
         callback = (OnConnectDevice) getTargetFragment();

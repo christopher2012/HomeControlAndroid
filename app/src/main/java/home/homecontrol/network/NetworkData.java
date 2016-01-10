@@ -6,10 +6,13 @@ import android.util.Log;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
+import org.joda.time.DateTime;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import cz.msebera.android.httpclient.Header;
 import home.homecontrol.MainActivity;
@@ -27,7 +30,8 @@ public class NetworkData {
     public static final String MOVEMENT = "/pir?state=";
     public static final String SETTINGS = "/settings";
     public static final String OK_MSG = "OK";
-    public static final String TEMPERATURE_FEEDS = "http://api.thingspeak.com/channels/72588/feed.json?start=2011-11-11%2010:10:10";
+    public static final String TEMPERATURE_FEEDS = "http://api.thingspeak.com/channels/72588/feed.json?start=2016-01-10%2000:00:00&end=2016-01-10%2023:59:59";
+    public static final String API_THINGSPEAK = "http://api.thingspeak.com/channels/72588/feed.json";
 
     public static final String CMD_CHANGE_BRIGHTNESS = "B";
     public static final String CMD_GET_DATA = "D";
@@ -49,6 +53,18 @@ public class NetworkData {
         client = new AsyncHttpClient();
         client.setTimeout(5000);
         callback = (OnServerResponse) fragment;
+    }
+
+    public static String getOneDayTempFeeds(DateTime dateTime){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date(dateTime.getMillis()));
+        String request = API_THINGSPEAK;
+        request += "?start=";
+        request += date;
+        request += "%2000:00:00&end=";
+        request += date;
+        request += "%2023:59:59";
+        return request;
     }
 
     public enum NetworkStatus {
@@ -126,12 +142,7 @@ public class NetworkData {
             client.get(request, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    switch (command) {
-                        case CMD_CHANGE_BRIGHTNESS:
-                                MainActivity.actualStatus.setBrightness(Integer.parseInt(state));
 
-                            break;
-                    }
                     Log.d(LOG_TAG, "data sent");
                 }
 

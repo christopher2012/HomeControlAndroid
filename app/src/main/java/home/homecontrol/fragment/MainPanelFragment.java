@@ -89,7 +89,6 @@ public class MainPanelFragment extends Fragment
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
@@ -122,10 +121,10 @@ public class MainPanelFragment extends Fragment
     public void onStart() {
         super.onStart();
         updateStatus();
-        if (NetworkData.getIpSet().equals("")) {
+/*        if (NetworkData.getIpSet().equals("")) {
             if (getFragmentManager().findFragmentByTag(ConnectionFragment.FRAGMENT_TAG) == null)
                 showConnectionDialog();
-        }
+        }*/
 
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -273,19 +272,19 @@ public class MainPanelFragment extends Fragment
         );
     }
 
-    public void changeBrightness(int progress) {
+    public void changeBrightness(final int progress) {
+        seekBarBrightness.setProgress(progress);
         client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND + NetworkData.CMD_CHANGE_BRIGHTNESS + validateProgress(progress),
                 new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-
+                        MainActivity.actualStatus.setBrightness(progress);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                         Toast.makeText(context, "Brak połączenie z urządzeniem!!", Toast.LENGTH_LONG).show();
                         bulbImage.setBackgroundColor(Color.rgb(255, 255, 255));
-                        seekBarBrightness.setProgress(0);
                     }
                 });
     }
