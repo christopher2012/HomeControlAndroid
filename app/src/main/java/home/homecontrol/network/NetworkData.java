@@ -25,13 +25,9 @@ public class NetworkData {
     public static final String LOG_TAG = NetworkData.class.getName();
 
     public static final String ANDROID_COMMAND = "/android?command=";
-    public static final String IP_SERVER = "http://192.168.0.";
-    public static final String LIGHT = "/light?state=";
-    public static final String MOVEMENT = "/pir?state=";
+    public static final String API_THINGSPEAK =
+            "http://api.thingspeak.com/channels/72588/feed.json";
     public static final String SETTINGS = "/settings";
-    public static final String OK_MSG = "OK";
-    public static final String TEMPERATURE_FEEDS = "http://api.thingspeak.com/channels/72588/feed.json?start=2016-01-10%2000:00:00&end=2016-01-10%2023:59:59";
-    public static final String API_THINGSPEAK = "http://api.thingspeak.com/channels/72588/feed.json";
 
     public static final String CMD_CHANGE_BRIGHTNESS = "B";
     public static final String CMD_GET_DATA = "D";
@@ -39,6 +35,13 @@ public class NetworkData {
     public static final String CMD_SMOKE_ALARM = "E";
     public static final String CMD_MONOXIDE_ALARM = "F";
     public static final String CMD_ALARM = "G";
+
+
+    public static final String IP_SERVER = "http://192.168.0.";
+    public static final String TEMPERATURE_FEEDS = "http://api.thingspeak.com/channels/72588/feed.json?start=2016-01-10%2000:00:00&end=2016-01-10%2023:59:59";
+    public static final String LIGHT = "/light?state=";
+    public static final String MOVEMENT = "/pir?state=";
+    public static final String OK_MSG = "OK";
 
     static String IP_SET = "";
 
@@ -99,10 +102,11 @@ public class NetworkData {
     public void updateData(final boolean isParsing) {
         if (!IP_SET.equals("")) {
             String request = NetworkData.getIpServer() + NetworkData.SETTINGS;
+            Log.d(LOG_TAG, "request: " + request);
             client.get(request, new AsyncHttpResponseHandler() {
                 @Override
                 public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                    String str = null;
+                    String str;
                     try {
                         str = new String(responseBody, "UTF-8");
                         Log.d(LOG_TAG, "response: " + str);
@@ -125,7 +129,8 @@ public class NetworkData {
                 }
 
                 @Override
-                public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
+                                      Throwable error) {
                     callback.serverResponse(NetworkStatus.CONNECTION_ERROR, ResponseType.DATA);
                 }
             });
@@ -135,7 +140,7 @@ public class NetworkData {
     }
 
 
-    public void sendCommand(final String command, final String state) {
+    public void sendCommand(String command, String state) {
         if (!IP_SET.equals("")) {
             String request = NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND + command + state;
             Log.d(LOG_TAG, "sending data: " + request);

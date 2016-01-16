@@ -121,10 +121,6 @@ public class MainPanelFragment extends Fragment
     public void onStart() {
         super.onStart();
         updateStatus();
-/*        if (NetworkData.getIpSet().equals("")) {
-            if (getFragmentManager().findFragmentByTag(ConnectionFragment.FRAGMENT_TAG) == null)
-                showConnectionDialog();
-        }*/
 
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
@@ -147,7 +143,6 @@ public class MainPanelFragment extends Fragment
                             swipeRefreshLayout.setEnabled(false);
                     }
                 }
-
         );
 
         seekBarBrightness.setMax(100);
@@ -179,6 +174,7 @@ public class MainPanelFragment extends Fragment
                         if (MainActivity.actualStatus.getBrightness() !=0) {
                             seekBarBrightness.setProgress(0);
                             networkData.sendCommand(NetworkData.CMD_CHANGE_BRIGHTNESS, "0");
+                            MainActivity.actualStatus.setBrightness(0);
                         }
                     }
                 }
@@ -191,6 +187,7 @@ public class MainPanelFragment extends Fragment
                         if (MainActivity.actualStatus.getBrightness()!=100) {
                             seekBarBrightness.setProgress(100);
                             networkData.sendCommand(NetworkData.CMD_CHANGE_BRIGHTNESS, "100");
+                            MainActivity.actualStatus.setBrightness(100);
                         }
                     }
                 }
@@ -219,7 +216,6 @@ public class MainPanelFragment extends Fragment
                         mSensorSett.show(getFragmentManager(), MovementSensorSettingsFragment.FRAGMENT_TAG);
                     }
                 }
-
         );
 
         autoOnLight.setOnClickListener(
@@ -232,7 +228,6 @@ public class MainPanelFragment extends Fragment
                         mSensorSett.show(getFragmentManager(), MovementSensorSettingsFragment.FRAGMENT_TAG);
                     }
                 }
-
         );
 
         smokeSensorButton.setOnClickListener(
@@ -250,7 +245,6 @@ public class MainPanelFragment extends Fragment
                         }
                     }
                 }
-
         );
 
         monoxideSensorButton.setOnClickListener(
@@ -298,6 +292,13 @@ public class MainPanelFragment extends Fragment
             return progress + "";
     }
 
+    public String validateTime(int time){
+        if (time < 10)
+            return "0" + time;
+        else
+            return time + "";
+    }
+
     void updateStatus() {
         seekBarBrightness.setProgress(MainActivity.actualStatus.getBrightness());
         bulbImage.setBackgroundColor(Color.rgb(255, 255, 255 - (int) (MainActivity.actualStatus.getBrightness() * 2.5)));
@@ -322,34 +323,22 @@ public class MainPanelFragment extends Fragment
             if (!((movementSensor.isOn() && (!MainActivity.actualStatus.getMovementAlarm().isOn()))
                     ^ (movementSensor.isOn() && (!MainActivity.actualStatus.getMovementAlarm().isOn())))) {
 
-                Log.d(LOG_TAG, "sending request: " + NetworkData.getIpServer()
-                        + NetworkData.ANDROID_COMMAND + (movementSensor.isOn() ? NetworkData.CMD_ALARM + "1" : NetworkData.CMD_ALARM + "0"));
-                if (movementSensor.isOn())
+                 if (movementSensor.isOn())
                     moveAlarm.setText(getString(R.string.alarm_on_sensor));
                 else
                     moveAlarm.setText(getString(R.string.alarm_off_sensor));
 
-
-                client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND
-                                + (movementSensor.isOn() ? NetworkData.CMD_ALARM + "1" : NetworkData.CMD_ALARM + "0"),
-                        new AsyncHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                String str;
-                                try {
-                                    str = new String(responseBody, "UTF-8");
-                                    Log.d("response", str);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                                Toast.makeText(context, "Brak połączenia z urządzeniem!!", Toast.LENGTH_LONG).show();
-                            }
-                        });
+                String command="";
+                command += movementSensor.isOn() ? "1" : "0";
+                command += movementSensor.isCustomSettOn() ?  "1" : "0";
+                command += validateProgress(movementSensor.getWeekDays());
+                command += validateTime(movementSensor.getSinceTime().getHourOfDay());
+                command += validateTime(movementSensor.getSinceTime().getMinuteOfHour());
+                command += validateTime(movementSensor.getToTime().getHourOfDay());
+                command += validateTime(movementSensor.getToTime().getMinuteOfHour());
+                Log.d(LOG_TAG, "command: " + command);
+                MainActivity.actualStatus.setMovementAlarm(movementSensor);
+                networkData.sendCommand(NetworkData.CMD_ALARM, command);
             }
 
         } else {
@@ -363,26 +352,18 @@ public class MainPanelFragment extends Fragment
                 else
                     autoOnLight.setText(getString(R.string.auto_light_off));
 
-                client.get(NetworkData.getIpServer() + NetworkData.ANDROID_COMMAND
-                                + (movementSensor.isOn() ? NetworkData.CMD_AUTO_LIGHT_ON + "1" : NetworkData.CMD_AUTO_LIGHT_ON + "0"),
-                        new AsyncHttpResponseHandler() {
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                                String str;
-                                try {
-                                    str = new String(responseBody, "UTF-8");
-                                    Log.d("response", str);
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
-                            }
-
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
-                                Toast.makeText(context, "Brak połączenia z urządzeniem!!", Toast.LENGTH_LONG).show();
-                            }
-                        });
+                String command="";
+                command += movementSensor.isOn() ? "1" : "0";
+                command += movementSensor.isCustomSettOn() ?  "1" : "0";
+                command += validateProgress(movementSensor.getWeekDays());
+                command += validateTime(movementSensor.getSinceTime().getHourOfDay());
+                command += validateTime(movementSensor.getSinceTime().getMinuteOfHour());
+                command += validateTime(movementSensor.getToTime().getHourOfDay());
+                command += validateTime(movementSensor.getToTime().getMinuteOfHour());
+                Log.d(LOG_TAG, "command: " + command);
+                MainActivity.actualStatus.setAutoSwitchOnLight(movementSensor);
+                Log.d(LOG_TAG, "weekDays: " + movementSensor.getWeekDays());
+                networkData.sendCommand(NetworkData.CMD_AUTO_LIGHT_ON, command);
             }
         }
     }

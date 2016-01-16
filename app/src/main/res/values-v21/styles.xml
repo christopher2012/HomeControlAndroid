@@ -13,4 +13,16 @@
 
     </style>
 
+    <style name="_AppThemeB" parent="Theme.AppCompat.Light.Dialog">
+
+
+        <item name="android:buttonStyle">@style/ButtonAppTheme</item>
+
+        <item name="android:imageButtonStyle">@style/ImageButtonAppTheme</item>
+
+        <item name="android:seekBarStyle">@style/SeekBarAppTheme</item>
+
+
+    </style>
+
 </resources>

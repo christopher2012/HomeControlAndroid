@@ -14,7 +14,6 @@ public class ActualStatus {
     float insideTemperature;
     float outsideTemperature;
     MovementSensor movementAlarm;
-    MovementSensor autoSwitchOffLight;
     MovementSensor autoSwitchOnLight;
     boolean smokeAlarm;
     boolean monoxideAlarm;
@@ -66,14 +65,6 @@ public class ActualStatus {
 
     public void setMovementAlarm(MovementSensor movementAlarm) {
         this.movementAlarm = movementAlarm;
-    }
-
-    public MovementSensor getAutoSwitchOffLight() {
-        return autoSwitchOffLight;
-    }
-
-    public void setAutoSwitchOffLight(MovementSensor autoSwitchOffLight) {
-        this.autoSwitchOffLight = autoSwitchOffLight;
     }
 
     public MovementSensor getAutoSwitchOnLight() {

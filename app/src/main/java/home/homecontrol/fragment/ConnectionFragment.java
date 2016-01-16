@@ -47,7 +47,6 @@ public class ConnectionFragment extends DialogFragment {
                 } catch (NumberFormatException e) {
 
                 }
-
                 if (ip < 255 && ip > 0) {
                     NetworkData.setIpSet(Integer.toString(ip));
                     callback.connectDevice();

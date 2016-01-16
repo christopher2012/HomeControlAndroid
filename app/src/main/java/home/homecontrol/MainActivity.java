@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.joda.time.DateTime;
+
 import home.homecontrol.fragment.MainPanelFragment;
 import home.homecontrol.fragment.SettingsFragment;
 
@@ -20,7 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
         getFragmentManager()
                 .beginTransaction()
-                .replace(R.id.mainFragmentContainer, new MainPanelFragment(), MainPanelFragment.FRAGMENT_TAG)
+                .replace(R.id.mainFragmentContainer, new MainPanelFragment(),
+                        MainPanelFragment.FRAGMENT_TAG)
                 .addToBackStack(MainPanelFragment.FRAGMENT_TAG)
                 .commit();
     }
@@ -28,12 +31,12 @@ public class MainActivity extends AppCompatActivity {
     public static void setExampleActualStatus() {
         actualStatus = new ActualStatus();
         actualStatus.setBrightness(0);
-        actualStatus.setInsideTemperature(0.0f);
-        actualStatus.setOutsideTemperature(0.0f);
-        MovementSensor movementSensor = new MovementSensor(false);
-        actualStatus.setMovementAlarm(movementSensor);
-        actualStatus.setAutoSwitchOffLight(movementSensor);
-        actualStatus.setAutoSwitchOnLight(movementSensor);
+        actualStatus.setInsideTemperature(0f);
+        actualStatus.setOutsideTemperature(0f);
+        MovementSensor movementSensorAlarm = new MovementSensor(false);
+        MovementSensor movementSensorLight = new MovementSensor(false);
+        actualStatus.setMovementAlarm(movementSensorAlarm);
+        actualStatus.setAutoSwitchOnLight(movementSensorLight);
         actualStatus.setSmokeAlarm(false);
         actualStatus.setMonoxideAlarm(false);
     }

@@ -56,7 +56,6 @@ public class TemperatureFragment extends Fragment
     private static final String DATE_BUTTON_PATTERN = "yyyy-MM-dd";
     private static final int SINCE_DATE_REQUEST_CODE = 1;
     private static final int TO_DATE_REQUEST_CODE = 2;
-
     private DateTime sinceDate;
 
     @Bind(R.id.graph)
@@ -83,21 +82,8 @@ public class TemperatureFragment extends Fragment
     public void onStart() {
         super.onStart();
 
-
-// set manual x bounds to have nice steps
-        //graph.getViewport().setMinX(d1.getTime());
-        //graph.getViewport().setMaxX(d3.getTime());
-        //graph.getViewport().setXAxisBoundsManual(true);
-
-
-        /**
-         * View port
-         * wartość minimalna to jest sinceDate, ustawiamy wielkosc okna w dniach lub godzinach
-         * wartość maksymalna musi zostać obliczana na postawie rokładu dni lub godzin,
-         * trzeba pamietać o warunku żeby wartość maksymalna nie wyszła poza zakres.
-         */
-
         DateTime date = new DateTime();
+        date = date.minusDays(4);
         sinceDate = date;
 
         DateTimeFormatter dtf = DateTimeFormat.forPattern(DATE_BUTTON_PATTERN);
@@ -136,7 +122,9 @@ public class TemperatureFragment extends Fragment
                         Log.d(LOG_TAG, "date: " + temperatureFeeds.get(i).getCreatedDate() + ", value: " + temperatureFeeds.get(i).getValue());
                         dataPoints[i] = new DataPoint(temperatureFeeds.get(i).getCreatedDate(), temperatureFeeds.get(i).getValue());
                     }
-                    LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>(dataPoints);
+
+                    LineGraphSeries<DataPoint> series;
+                    series = new LineGraphSeries<DataPoint>(dataPoints);
 
                     series.setOnDataPointTapListener(new OnDataPointTapListener() {
                         @Override
@@ -156,7 +144,6 @@ public class TemperatureFragment extends Fragment
                     series.setDataPointsRadius(8);
                     series.setThickness(3);
                     graphView.addSeries(series);
-
                     SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 
                     graphView.getGridLabelRenderer().setLabelFormatter(new DateAsXAxisLabelFormatter(getActivity(), format));
@@ -211,6 +198,7 @@ public class TemperatureFragment extends Fragment
     @Override
     public void timePick(int hour, int minute, int requestCode) {
 
+        //graphView.removeSeries(series);
         if (requestCode == SINCE_DATE_REQUEST_CODE) {
             sinceDate = new DateTime(sinceDate.getYear(), sinceDate.getMonthOfYear(),
                     sinceDate.getDayOfMonth(), hour, minute);

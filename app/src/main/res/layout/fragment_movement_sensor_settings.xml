@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="0dp"
     android:orientation="vertical">
 
     <LinearLayout
@@ -22,7 +23,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:text="WLACZ"/>
+                android:text="WŁACZ"/>
 
         </FrameLayout>
 
@@ -38,7 +39,7 @@
                 android:layout_gravity="center"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="4dp"
-                android:text="WYLACZ"/>
+                android:text="WYŁACZ"/>
 
         </FrameLayout>
 

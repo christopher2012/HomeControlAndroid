@@ -14,4 +14,15 @@
 
   </style>
 
+  <style name="_AppThemeB" parent="Theme.AppCompat.Dialog">
+
+    <item name="buttonStyle">@style/ButtonAppTheme</item><!--
+
+    <item name="imageButtonStyle">@style/ImageButtonAppTheme</item>
+
+    <item name="seekBarStyle">@style/SeekBarAppTheme</item>-->
+
+  </style>
+
+
 </resources>

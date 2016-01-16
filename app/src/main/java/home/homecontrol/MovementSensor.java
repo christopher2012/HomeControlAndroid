@@ -17,15 +17,35 @@ public class MovementSensor {
 
     }
 
+
+
     public MovementSensor(boolean isOn) {
         this.isOn = isOn;
         this.isCustomSettOn = false;
+        setSinceTime(new DateTime().withTime(0,0,0,0));
+        setToTime(new DateTime().withTime(23,59,0,0));
     }
 
     public MovementSensor(boolean isOn, boolean isCustomSettOn, int weekDays) {
         this.isOn = isOn;
         this.isCustomSettOn = isCustomSettOn;
         this.weekDays = weekDays;
+    }
+
+    public DateTime getSinceTime() {
+        return sinceTime;
+    }
+
+    public void setSinceTime(DateTime sinceTime) {
+        this.sinceTime = sinceTime;
+    }
+
+    public DateTime getToTime() {
+        return toTime;
+    }
+
+    public void setToTime(DateTime toTime) {
+        this.toTime = toTime;
     }
 
     public boolean isOn() {
